@@ -1,6 +1,6 @@
 <template>
   <div class="article-preview">
-    <RwvArticleMeta isPreview :article="article" />
+    <RwvArticleMeta :article="article" />
     <router-link :to="articleLink" class="preview-link">
       <h1 v-text="article.title" />
       <p v-text="article.description" />
