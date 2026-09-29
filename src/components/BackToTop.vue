@@ -1,25 +1,25 @@
 <template>
-    <button class="back-to-top" v-if="showBackToTop" @click="scrollToTop">
-      Back to top
-    </button>
+  <button class="back-to-top" v-if="showBackToTop" @click="scrollToTop">
+    Back to top
+  </button>
 </template>
 
 <script setup>
-  import { ref, computed, onMounted, onUnmounted } from "vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
 
-  const scrollTop = ref(0);
-  let ticking = false;
+const scrollTop = ref(0);
+let ticking = false;
 
-  const scrollToTop = (event) => {
-    event.preventDefault();
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+const scrollToTop = (event) => {
+  event.preventDefault();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
 
-  const showBackToTop = computed(() => {
-    return scrollTop.value > 300;
-  });
+const showBackToTop = computed(() => {
+  return scrollTop.value > 300;
+});
 
-  const handleScroll = () => {
+const handleScroll = () => {
   if (!ticking) {
     window.requestAnimationFrame(() => {
       scrollTop.value = window.scrollY;
@@ -29,14 +29,13 @@
   }
 };
 
-  onMounted(() => {
-    window.addEventListener("scroll", handleScroll);
-  });
+onMounted(() => {
+  window.addEventListener("scroll", handleScroll);
+});
 
-  onUnmounted(() => {
-    window.removeEventListener("scroll", handleScroll);
-  });
-
+onUnmounted(() => {
+  window.removeEventListener("scroll", handleScroll);
+});
 </script>
 
 <style scoped>
@@ -59,5 +58,4 @@
 .back-to-top button:hover {
   background-color: #0056b3;
 }
-
 </style>
