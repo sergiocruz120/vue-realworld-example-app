@@ -88,9 +88,9 @@ const toggleFollow = () => {
     return;
   }
   if (props.article.following) {
-    profileStore.unfollow({ username: profile.value.username });
+    profileStore.unfollow({ username: props.article.author.username });
   } else {
-    profileStore.follow({ username: profile.value.username });
+    profileStore.follow({ username: props.article.author.username });
   }
 };
 
