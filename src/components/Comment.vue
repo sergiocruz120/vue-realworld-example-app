@@ -4,9 +4,12 @@
       <p class="card-text">{{ comment.body }}</p>
     </div>
     <div class="card-footer">
-      <a href="" class="comment-author">
+      <router-link
+        class="comment-author"
+        :to="{ name: 'profile', params: { username: comment.author.username } }"
+      >
         <img :src="authorImage" class="comment-author-img" />
-      </a>
+      </router-link>
       <router-link
         class="comment-author"
         :to="{ name: 'profile', params: { username: comment.author.username } }"
