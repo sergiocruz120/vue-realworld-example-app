@@ -1,10 +1,6 @@
 <template>
   <ul class="tag-list">
-    <li
-      class="tag-default tag-pill tag-outline"
-      v-for="(tag, index) of tags"
-      :key="index"
-    >
+    <li class="tag-default tag-pill tag-outline" v-for="tag of tags" :key="tag">
       <span v-text="tag" />
     </li>
   </ul>
