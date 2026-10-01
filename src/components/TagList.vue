@@ -8,6 +8,7 @@
 
 <script setup>
 defineProps({
-  tags: Array
+  tags: Array,
+  default: () => []
 });
 </script>
