@@ -110,7 +110,10 @@ const { profile, errors: profileErrors } = storeToRefs(profileStore);
 onMounted(() => profileStore.fetchProfile(route.params));
 // The component is reused between the articles/favorites tabs and other
 // profiles, so refetch on any route change.
-watch(route, (to) => profileStore.fetchProfile(to.params));
+watch(
+  () => route.params.username,
+  (username) => profileStore.fetchProfile({ username })
+);
 
 const hasProfileErrors = computed(
   () => Object.keys(profileErrors.value || {}).length > 0
