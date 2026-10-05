@@ -9,11 +9,7 @@
               Need an account?
             </router-link>
           </p>
-          <ul v-if="errors" class="error-messages">
-            <li v-for="(v, k) in errors" :key="k">
-              {{ k }} {{ formatError(v) }}
-            </li>
-          </ul>
+          <RwvListErrors :errors="errors" />
           <form @submit.prevent="onSubmit(email, password)">
             <fieldset class="form-group">
               <input
@@ -44,11 +40,11 @@
 </template>
 
 <script setup>
+import RwvListErrors from "@/components/ListErrors";
 import { computed, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "@/store/auth";
-import { formatError } from "@/common/format";
 
 defineOptions({ name: "RwvLogin" });
 
