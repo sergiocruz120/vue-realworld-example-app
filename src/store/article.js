@@ -19,48 +19,93 @@ export const useArticleStore = defineStore("article", {
   }),
   actions: {
     async fetchArticle(articleSlug) {
-      const { data } = await ArticlesService.get(articleSlug);
-      this.article = data.article;
-      return data;
+      try {
+        const { data } = await ArticlesService.get(articleSlug);
+        this.article = data.article;
+        return data;
+      } catch (error) {
+        console.error(error);
+        return null;
+      }
     },
     async fetchComments(articleSlug) {
-      const { data } = await CommentsService.get(articleSlug);
-      this.comments = data.comments;
-      return data.comments;
+      try {
+        const { data } = await CommentsService.get(articleSlug);
+        this.comments = data.comments;
+        return data.comments;
+      } catch (error) {
+        console.error(error);
+        return null;
+      }
     },
     async createComment({ slug, comment }) {
-      const { data } = await CommentsService.post(slug, comment);
-      if (data && data.comment) {
-        this.comments = this.comments.concat([data.comment]);
-      } else {
-        await this.fetchComments(slug);
+      try {
+        const { data } = await CommentsService.post(slug, comment);
+        if (data && data.comment) {
+          this.comments = this.comments.concat([data.comment]);
+        } else {
+          await this.fetchComments(slug);
+        }
+      } catch (error) {
+        console.error(error);
+        throw error;
       }
     },
     async destroyComment({ slug, commentId }) {
-      // Any 2XX from the server means the comment is gone; update local state
-      // directly instead of refetching.
-      await CommentsService.destroy(slug, commentId);
-      this.comments = this.comments.filter((c) => c.id !== commentId);
+      try {
+        // Any 2XX from the server means the comment is gone; update local state
+        // directly instead of refetching.
+        await CommentsService.destroy(slug, commentId);
+        this.comments = this.comments.filter((c) => c.id !== commentId);
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
     },
     async addFavorite(slug) {
-      const { data } = await FavoriteService.add(slug);
-      // Update list as well. This allows us to favorite an article in the Home view.
-      useHomeStore().updateArticleInList(data.article);
-      this.article = data.article;
+      try {
+        const { data } = await FavoriteService.add(slug);
+        // Update list as well. This allows us to favorite an article in the Home view.
+        useHomeStore().updateArticleInList(data.article);
+        this.article = data.article;
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
     },
     async removeFavorite(slug) {
-      const { data } = await FavoriteService.remove(slug);
-      useHomeStore().updateArticleInList(data.article);
-      this.article = data.article;
+      try {
+        const { data } = await FavoriteService.remove(slug);
+        useHomeStore().updateArticleInList(data.article);
+        this.article = data.article;
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
     },
     publishArticle() {
-      return ArticlesService.create(this.article);
+      try {
+        return ArticlesService.create(this.article);
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
     },
     editArticle() {
-      return ArticlesService.update(this.article.slug, this.article);
+      try {
+        return ArticlesService.update(this.article.slug, this.article);
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
     },
     deleteArticle(slug) {
-      return ArticlesService.destroy(slug);
+      try {
+        return ArticlesService.destroy(slug);
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
     },
     addTag(tag) {
       this.article.tagList = this.article.tagList.concat([tag]);
