@@ -6,7 +6,7 @@
           <h1 class="text-xs-center">Your Settings</h1>
           <RwvListErrors v-if="hasErrors" :errors="errors" />
           <form @submit.prevent="updateSettings()">
-            <fieldset>
+            <fieldset :disabled="inProgress">
               <fieldset class="form-group">
                 <input
                   class="form-control"
@@ -53,10 +53,11 @@
                 />
               </fieldset>
               <button
+                :disabled="inProgress"
                 type="submit"
                 class="btn btn-lg btn-primary pull-xs-right"
               >
-                Update Settings
+                {{ inProgress ? "Updating..." : "Update Settings" }}
               </button>
             </fieldset>
           </form>
@@ -85,6 +86,7 @@ const authStore = useAuthStore();
 const { currentUser } = storeToRefs(authStore);
 
 const errors = ref({});
+const inProgress = ref(false);
 const form = reactive({
   username: "",
   email: "",
@@ -107,6 +109,7 @@ onMounted(syncFromUser);
 watch(() => currentUser.value.username, syncFromUser);
 
 const updateSettings = () => {
+  inProgress.value = true;
   const payload = {
     username: form.username,
     email: form.email,
@@ -117,6 +120,7 @@ const updateSettings = () => {
   authStore
     .updateUser(payload)
     .then(() => {
+      inProgress.value = false;
       errors.value = {};
       router.push({
         name: "profile",
@@ -124,6 +128,7 @@ const updateSettings = () => {
       });
     })
     .catch((error) => {
+      inProgress.value = false;
       errors.value = extractErrors(error);
     });
 };
