@@ -87,19 +87,34 @@ export default {
 </script>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { storeToRefs } from "pinia";
-import { useRouter, onBeforeRouteUpdate, onBeforeRouteLeave } from "vue-router";
+import {
+  useRouter,
+  useRoute,
+  onBeforeRouteUpdate,
+  onBeforeRouteLeave
+} from "vue-router";
 import RwvListErrors from "@/components/ListErrors";
 import { extractErrors } from "@/common/errors";
 
 const router = useRouter();
+const route = useRoute();
 const articleStore = useArticleStore();
 const { article } = storeToRefs(articleStore);
 
 const tagInput = ref(null);
 const inProgress = ref(false);
 const errors = ref({});
+
+watch(
+  () => route.params.slug,
+  (slug) => {
+    if (slug) {
+      articleStore.fetchArticle(slug);
+    }
+  }
+);
 
 // Reset state if user goes from /editor/:id to /editor
 // The component is not recreated so we use the hook to reset the state.
