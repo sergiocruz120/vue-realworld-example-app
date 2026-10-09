@@ -20,7 +20,9 @@ export const useAuthStore = defineStore("auth", {
       this.authStatus = "authenticated";
       this.user = user;
       this.errors = {};
-      JwtService.saveToken(user.token);
+       if (user.token) {
+         JwtService.saveToken(user.token);
+       }
     },
     setAuthUnavailable() {
       this.isAuthenticated = false;
